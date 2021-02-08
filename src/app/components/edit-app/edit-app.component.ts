@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DndDropEvent, DropEffect } from 'ngx-drag-drop';
+import { ToastrService } from 'ngx-toastr';
 import { field, value } from '../../global.model';
 import { LocalStorageService } from '../../services/local-storage.service';
 
@@ -20,7 +21,7 @@ export class EditAppComponent implements OnInit {
   model: any;
   recipients: string;
 
-  constructor(private localStorageService: LocalStorageService) {
+  constructor(private localStorageService: LocalStorageService, private toastr: ToastrService) {
 
   }
 
@@ -123,6 +124,8 @@ export class EditAppComponent implements OnInit {
 
   save() {
     this.localStorageService.setItem("formData", JSON.stringify(this.model));
+    // this.toastr.clear();
+    this.toastr.info("Saved form data locally", "", { timeOut: 2000 });
   }
 
   clear() {
@@ -132,6 +135,12 @@ export class EditAppComponent implements OnInit {
       attributes: []
     };
     this.localStorageService.clear();
+    // this.toastr.clear();
+    this.toastr.error("Cleared local form data", "", { timeOut: 2000 });
+  }
+
+  publish() {
+    this.toastr.warning("Publish to be implemented yet!", "", { timeOut: 2000 });
   }
 
   addValue(values) {
