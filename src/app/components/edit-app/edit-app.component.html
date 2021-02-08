@@ -40,7 +40,7 @@
                     (dndCanceled)="onDragCanceled($event)" (dndMoved)="onDragged(item, model.attributes, 'move')"
                     [dndEffectAllowed]="'all'" [dndDraggable]="item">
                     <div class="row form-group">
-                        <div class="col-1"><i class="fa fa-ellipsis-v dndHandle" dndHandle></i></div>
+                        <div class="col-1"><i class="fa fa-arrows dndHandle px-2" dndHandle></i></div>
                         <div class="col-7">
                             <!-- <i [ngClass]="item.icon" class="fa pull-left"></i>
               <h5>{{item.label}}
@@ -67,8 +67,8 @@
                             </div>
                             <div *ngIf="item.type=='textarea'">
                                 <label>{{item.label}}</label> <label *ngIf="item.required" class="text-danger">*</label>
-                                <textarea class="form-control" id="{{item.name}}" placeholder="{{item.placeholder}}">
-                        </textarea>
+                                <textarea class="form-control" id="{{item.name}}"
+                                    placeholder="{{item.placeholder}}"></textarea>
                             </div>
                             <div *ngIf="item.type=='file'">
                                 <label>{{item.label}} (File can't be uploaded right now)</label> <label
@@ -112,27 +112,28 @@
                             </div>
                         </div>
                         <div class="col-4">
-                            <i *ngIf="item.toggle" (click)="item.toggle=false" class="fa fa-chevron-up pull-right"></i>
+                            <i *ngIf="item.toggle" (click)="item.toggle=false"
+                                class="fa fa-chevron-up pull-right px-2"></i>
                             <i *ngIf="!item.toggle" (click)="item.toggle=true"
-                                class="fa fa-chevron-down pull-right"></i>
-                            <i (click)="removeField(i)" class="fa fa-trash pull-right"></i>
+                                class="fa fa-chevron-down pull-right px-2"></i>
+                            <i (click)="removeField(i)" class="fa fa-trash pull-right px-2"></i>
                         </div>
                     </div>
                     <div *ngIf="item.toggle" class="toggle-Wrapper">
                         <div class="form-group">
                             <label>Required</label>
-                            <i *ngIf="item.required" (click)="item.required=false" class="fa fa-toggle-on red"></i>
-                            <i *ngIf="!item.required" (click)="item.required=true" class="fa fa-toggle-off"></i>
+                            <i *ngIf="item.required" (click)="item.required=false" class="fa fa-toggle-on red mx-2"></i>
+                            <i *ngIf="!item.required" (click)="item.required=true" class="fa fa-toggle-off mx-2"></i>
                             <span class="pull-right ucfirst">{{item.type}}</span>
                         </div>
                         <div class="form-group">
                             <label>Label</label>
                             <input class="form-control" type="text" [(ngModel)]="item.label" />
                         </div>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label>Name</label>
                             <input class="form-control" type="text" [(ngModel)]="item.name" />
-                        </div>
+                        </div> -->
                         <div class="form-group">
                             <label>Placeholder</label>
                             <input class="form-control" type="text" [(ngModel)]="item.placeholder" />
@@ -258,8 +259,18 @@
     </div>
 
 </div>
+<div class="mt-4 text-center">
+    <button type="button" class="btn btn-outline-info ms-4" (click)="save()"><i
+            class="fa fa-save pull-left py-1"></i>Save</button>
 
-<div *ngIf="model" class="container marginT60  marginB30" style="max-width:600px;">
+    <button type="button" class="btn btn-outline-danger ms-4" (click)="clear()"><i
+            class="fa fa-save pull-left py-1"></i>Clear</button>
+</div>
+<div class="container mt-4">
+    <label for="recipients" class="form-label">Recipients</label>
+    <textarea name="recipients" id="recipients" class="form-control bg-dark text-light"></textarea>
+</div>
+<div *ngIf="model" class="container marginT60 marginB30" style="max-width:600px;">
     <div class="row" style="padding:20px;">
         <div class="col-12">
             <h3>{{model.name}}</h3>
@@ -358,11 +369,11 @@
                     </div>
                 </div>
 
-                <!-- <p (click)="show=1" class="marginT60 pointer">Show developer data</p> -->
+                <!-- <p (click)="show=true" class="marginT60 pointer">Show developer data</p> -->
 
             </div>
         </form>
     </div>
 </div>
 
-<!-- <pre *ngIf="show==1 && model">{{model|json}}</pre> -->
+<!-- <pre *ngIf="show && model">{{model|json}}</pre> -->

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DndDropEvent, DropEffect } from 'ngx-drag-drop';
 import { field, value } from '../../global.model';
+import { LocalStorageService } from '../../services/local-storage.service';
 
 
 @Component({
@@ -9,158 +10,71 @@ import { field, value } from '../../global.model';
   styleUrls: ['./edit-app.component.css']
 })
 export class EditAppComponent implements OnInit {
-  show = 0;
-  value: value = {
-    label: "",
-    value: ""
-  };
-  success = false;
+  show: boolean;
+  success: boolean;
+  report: boolean;
+  reports: any;
+  item: value;
+  fieldModels: Array<field>;
+  modelFields: Array<field>;
+  model: any;
+  recipients: string;
 
-  fieldModels: Array<field> = [
-    {
-      "type": "text",
-      "icon": "fa-font",
-      "label": "Text",
-      // "description": "",
-      "placeholder": "",
-      "className": "form-control",
-      "subtype": "text",
-      "regex": "",
-      "handle": true
-    },
-    {
-      "type": "number",
-      "label": "Number",
-      "icon": "fa-html5",
-      // "description": "Number",
-      "placeholder": "",
-      "className": "form-control",
-      // "value": "",
-      // "min": 12,
-      // "max": 90
-    },
-    // {
-    //   "type": "date",
-    //   "icon": "fa-calendar",
-    //   "label": "Date",
-    //   "placeholder": "Date",
-    //   "className": "form-control"
-    // },
-    // {
-    //   "type": "datetime-local",
-    //   "icon": "fa-calendar",
-    //   "label": "DateTime",
-    //   "placeholder": "Date Time",
-    //   "className": "form-control"
-    // },
-    {
-      "type": "textarea",
-      "icon": "fa-text-width",
-      "label": "Textarea"
-    },
-    // {
-    //   "type": "checkbox",
-    //   "required": true,
-    //   "label": "Checkbox",
-    //   "icon": "fa-list",
-    //   "description": "Checkbox",
-    //   "inline": true,
-    //   "values": [
-    //     {
-    //       "label": "Option 1",
-    //       "value": "option-1"
-    //     },
-    //     {
-    //       "label": "Option 2",
-    //       "value": "option-2"
-    //     }
-    //   ]
-    // },
-    // {
-    //   "type": "radio",
-    //   "icon": "fa-list-ul",
-    //   "label": "Radio",
-    //   "description": "Radio boxes",
-    //   "values": [
-    //     {
-    //       "label": "Option 1",
-    //       "value": "option-1"
-    //     },
-    //     {
-    //       "label": "Option 2",
-    //       "value": "option-2"
-    //     }
-    //   ]
-    // },
-    // {
-    //   "type": "autocomplete",
-    //   "icon": "fa-bars",
-    //   "label": "Select",
-    //   "description": "Select",
-    //   "placeholder": "Select",
-    //   "className": "form-control",
-    //   "values": [
-    //     {
-    //       "label": "Option 1",
-    //       "value": "option-1"
-    //     },
-    //     {
-    //       "label": "Option 2",
-    //       "value": "option-2"
-    //     },
-    //     {
-    //       "label": "Option 3",
-    //       "value": "option-3"
-    //     }
-    //   ]
-    // },
-    // {
-    //   "type": "file",
-    //   "icon": "fa-file",
-    //   "label": "File Upload",
-    //   "className": "form-control",
-    //   "subtype": "file"
-    // },
-    {
-      "type": "button",
-      "icon": "fa-paper-plane",
-      "subtype": "submit",
-      "label": "Submit"
-    }
-  ];
+  constructor(private localStorageService: LocalStorageService) {
 
-  modelFields: Array<field> = [];
-  model: any = {
-    name: '',
-    description: '',
-    // theme: {
-    //   bgColor: "ffffff",
-    //   textColor: "ffffff",
-    //   bannerImage: ""
-    // },
-    attributes: this.modelFields
-  };
-
-  report = false;
-  reports: any = [];
-
-  constructor(
-    // private route:ActivatedRoute
-  ) { }
+  }
 
   ngOnInit() {
-    // this.route.params.subscribe( params =>{
-    //   console.log(params);
-    //   this.us.getDataApi('/admin/getFormById',{id:params.id}).subscribe(r=>{
-    //     console.log(r);
-    //     this.model = r['data'];
-    //   });
-    // });
+    this.show = false;
+    this.success = false;
+    this.report = false;
+    this.reports = [];
+    this.item = { label: "", value: "" };
+    this.fieldModels = [
+      {
+        "type": "text",
+        "icon": "fa-font",
+        "label": "Text",
+        "placeholder": "",
+        "className": "form-control",
+        "subtype": "text",
+        "regex": "",
+        "handle": true
+      },
+      {
+        "type": "number",
+        "label": "Number",
+        "icon": "fa-html5",
+        "placeholder": "",
+        "className": "form-control",
+      },
+      {
+        "type": "textarea",
+        "icon": "fa-text-width",
+        "label": "Textarea",
+        "placeholder": ""
+      },
+      {
+        "type": "button",
+        "icon": "fa-paper-plane",
+        "subtype": "submit",
+        "label": "Submit"
+      }
+    ];
+    this.modelFields = [];
 
+    if (this.localStorageService.getItem("formData")) {
+      this.model = JSON.parse(this.localStorageService.getItem("formData"));
+    }
+    else {
+      this.model = {
+        name: '',
+        description: '',
+        attributes: this.modelFields
+      };
+    }
 
-    // this.model = this.cs.data; 
-    // console.log(this.model.data);
-
+    this.recipients = "";
   }
 
   onDragStart(event: DragEvent) {
@@ -207,9 +121,22 @@ export class EditAppComponent implements OnInit {
     }
   }
 
+  save() {
+    this.localStorageService.setItem("formData", JSON.stringify(this.model));
+  }
+
+  clear() {
+    this.model = {
+      name: '',
+      description: '',
+      attributes: []
+    };
+    this.localStorageService.clear();
+  }
+
   addValue(values) {
-    values.push(this.value);
-    this.value = { label: "", value: "" };
+    values.push(this.item);
+    this.item = { label: "", value: "" };
   }
 
   removeField(i) {
