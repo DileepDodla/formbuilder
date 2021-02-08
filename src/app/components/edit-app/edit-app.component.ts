@@ -56,7 +56,7 @@ export class EditAppComponent implements OnInit {
       },
       {
         "type": "button",
-        "icon": "fa-paper-plane",
+        "icon": "fa-send",
         "subtype": "submit",
         "label": "Submit"
       }

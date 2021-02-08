@@ -116,13 +116,14 @@
                                 class="fa fa-chevron-up pull-right px-2"></i>
                             <i *ngIf="!item.toggle" (click)="item.toggle=true"
                                 class="fa fa-chevron-down pull-right px-2"></i>
-                            <i (click)="removeField(i)" class="fa fa-trash pull-right px-2"></i>
+                            <i (click)="removeField(i)" class="fa fa-trash pull-right px-2 text-danger"></i>
                         </div>
                     </div>
                     <div *ngIf="item.toggle" class="toggle-Wrapper">
                         <div class="form-group">
                             <label>Required</label>
-                            <i *ngIf="item.required" (click)="item.required=false" class="fa fa-toggle-on red mx-2"></i>
+                            <i *ngIf="item.required" (click)="item.required=false"
+                                class="fa fa-toggle-on text-danger mx-2"></i>
                             <i *ngIf="!item.required" (click)="item.required=true" class="fa fa-toggle-off mx-2"></i>
                             <span class="pull-right ucfirst">{{item.type}}</span>
                         </div>
@@ -264,11 +265,15 @@
             class="fa fa-save pull-left py-1"></i>Save</button>
 
     <button type="button" class="btn btn-outline-danger ms-4" (click)="clear()"><i
-            class="fa fa-save pull-left py-1"></i>Clear</button>
+            class="fa fa-trash pull-left py-1"></i>Clear</button>
 </div>
 <div class="container mt-4">
     <label for="recipients" class="form-label">Recipients</label>
     <textarea name="recipients" id="recipients" class="form-control bg-dark text-light"></textarea>
+</div>
+<div class="mt-4 text-center">
+    <button type="button" class="btn btn-outline-primary ms-4" (click)="save()"><i
+            class="fa fa-database pull-left py-1"></i>Publish</button>
 </div>
 <div *ngIf="model" class="container marginT60 marginB30" style="max-width:600px;">
     <div class="row" style="padding:20px;">
